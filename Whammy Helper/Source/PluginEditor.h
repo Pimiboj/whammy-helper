@@ -29,5 +29,15 @@ private:
     // access the processor object that created it.
     WhammyHelperAudioProcessor& audioProcessor;
 
+    juce::ComboBox midiOutputSelector;
+    juce::ComboBox realTuningSelector;
+    juce::ComboBox midiChannelSelector;
+    juce::ComboBox whammyVersionSelector;
+
+    void fillMidiOutputSelector();
+    void fillTuningSelector();
+    void fillMidiChannelSelector();
+    void fillWhammyVersionSelector();
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyHelperAudioProcessorEditor)
 };

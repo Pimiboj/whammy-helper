@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="KBHSGD" name="Whammy Helper" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              version="0.0.1" companyName="DSPim" pluginFormats="buildAAX,buildAU,buildVST3"
+              version="0.0.1" companyName="DSPim" pluginFormats="buildStandalone,buildVST3"
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               pluginVST3Category="Pitch Shift" pluginRTASCategory="4" pluginAAXCategory="4"
               cppLanguageStandard="20">

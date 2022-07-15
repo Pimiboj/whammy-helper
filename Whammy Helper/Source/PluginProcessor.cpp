@@ -183,6 +183,39 @@ void WhammyHelperAudioProcessor::setStateInformation (const void* data, int size
     // whose contents will have been created by the getStateInformation() call.
 }
 
+juce::AudioProcessorValueTreeState::ParameterLayout WhammyHelperAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+
+    juce::StringArray channelStringArray;
+    for (int i = 1; i <= 16; i++)
+    {
+        channelStringArray.add(std::to_string(i));
+    }
+    layout.add(std::make_unique<juce::AudioParameterChoice>("Midi Channel", "Midi Channel", channelStringArray, 0));
+
+    return layout;
+}
+
+juce::StringArray WhammyHelperAudioProcessor::getMidiOutputList()
+{
+    juce::StringArray outList;
+
+    juce::Array<juce::MidiDeviceInfo> devices = juce::MidiOutput::getAvailableDevices();
+
+    for (auto output : devices)
+    {
+        outList.add(output.name);
+    }
+
+    return outList;
+}
+
+std::string WhammyHelperAudioProcessor::getNoteDifference()
+{
+    return "-3";
+}
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
