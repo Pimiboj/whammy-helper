@@ -8,6 +8,9 @@
               cppLanguageStandard="20">
   <MAINGROUP id="IJqpX6" name="Whammy Helper">
     <GROUP id="{37B9E4AE-9ED3-7B7B-7EDA-5982EBC02AFA}" name="Source">
+      <FILE id="QsY6IY" name="Whammy5.cpp" compile="1" resource="0" file="Source/Whammy5.cpp"/>
+      <FILE id="mY9fIA" name="IPitchShifter.h" compile="0" resource="0" file="Source/IPitchShifter.h"/>
+      <FILE id="enZdGb" name="Whammy5.h" compile="0" resource="0" file="Source/Whammy5.h"/>
       <FILE id="kLqmlQ" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="r2PEhF" name="PluginProcessor.h" compile="0" resource="0"

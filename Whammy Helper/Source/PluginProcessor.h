@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "IPitchShifter.h"
 
 //==============================================================================
 /**
@@ -60,8 +61,8 @@ public:
     juce::AudioProcessorValueTreeState apvts{ *this, nullptr, "Parameters", createParameterLayout() };
 
 private:
-
-    juce::AudioDeviceManager deviceManager;
+    std::unique_ptr<IPitchShifter> m_shifter;
+    
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyHelperAudioProcessor)
