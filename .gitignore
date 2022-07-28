@@ -34,3 +34,6 @@
 # JUCE
 /Whammy Helper/Builds
 /Whammy Helper/JuceLibraryCode
+
+# REAPER
+/Test Project/
