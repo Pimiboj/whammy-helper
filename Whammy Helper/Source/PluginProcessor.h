@@ -10,6 +10,36 @@
 
 #include <JuceHeader.h>
 #include "IPitchShifter.h"
+enum notes
+{
+    A0 = 21,
+    As0 = 22,
+    B0 = 23,
+    C1 = 24,
+    Cs1 = 25,
+    D1 = 26,
+    Ds1 = 27,
+    E1 = 28,
+    F1 = 29,
+    Fs1 = 30,
+    G1 = 31,
+    Gs1 = 32,
+    A1 = 33,
+    As1 = 34,
+    B1 = 35,
+    C2 = 36,
+    Cs2 = 37,
+    D2 = 38,
+    Ds2 = 39,
+    E2 = 40,
+    F2 = 41,
+    Fs2 = 42,
+    G2 = 43,
+    Gs2 = 44,
+    A2 = 45
+};
+
+int GetNoteNumberFromNoteName(juce::String name);
 
 //==============================================================================
 /**
@@ -62,6 +92,7 @@ public:
 
 private:
     std::unique_ptr<IPitchShifter> m_shifter;
+    int m_noteDifference;
     
 
     //==============================================================================

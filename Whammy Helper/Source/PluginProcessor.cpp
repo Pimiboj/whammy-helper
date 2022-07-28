@@ -138,12 +138,13 @@ void WhammyHelperAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 {
     juce::ScopedNoDenormals noDenormals;
 
-    if (!midiMessages.isEmpty())
+    if (!midiMessages.isEmpty() && m_shifter)
     {
         double sampleRate = getSampleRate();
         juce::MidiBuffer midiOutputBuffer;
-
-        if (!m_shifter) return;
+        int rootNote = static_cast<int>(apvts.getRawParameterValue("Root Note")->load()) + 21;
+        int midiChannel = static_cast<int>(apvts.getRawParameterValue("Midi Channel")->load());
+        m_shifter->ChangeMidiChannel(midiChannel);
 
         for (const juce::MidiBufferIterator::reference meta : midiMessages)
         {
@@ -151,14 +152,43 @@ void WhammyHelperAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
             if (msg.isNoteOn())
             {
-                int noteDifference = msg.getNoteNumber() - 40; // midi note number for e2
-                juce::MidiBuffer output = m_shifter->Pitch(noteDifference, (int)(msg.getTimeStamp() * sampleRate));
+                int noteDifference = msg.getNoteNumber() - rootNote;
+                juce::MidiBuffer output = m_shifter->Pitch(noteDifference, msg.getTimeStamp());
                 midiOutputBuffer.addEvents(output, 0, -1, 0);
             }
         }
 
         midiMessages.swapWith(midiOutputBuffer);
     }
+}
+
+int GetNoteNumberFromNoteName(juce::String name)
+{
+    static const char* const noteNames[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb" };
+
+    int keyNumber, octave = 0, numPos = name.indexOfAnyOf("01234567890-");
+
+    if (numPos == 0)
+        keyNumber = name.getIntValue();	//apparently already a number!
+
+    else
+    {
+        if (numPos > 0)
+        {
+            octave = name.substring(numPos).getIntValue() + 1;
+        }
+        else
+        {
+            octave = 5;		//default to octave of middle C if none found
+            numPos = name.length();
+        }
+
+        juce::String name(name.substring(0, numPos).trim().toUpperCase());
+
+        keyNumber = juce::StringArray(noteNames, 12).indexOf(name) % 12;
+    }
+
+    return keyNumber + octave * 12;
 }
 
 //==============================================================================
@@ -169,7 +199,8 @@ bool WhammyHelperAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* WhammyHelperAudioProcessor::createEditor()
 {
-    return new WhammyHelperAudioProcessorEditor (*this);
+    //return new WhammyHelperAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -197,6 +228,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout WhammyHelperAudioProcessor::
     }
     layout.add(std::make_unique<juce::AudioParameterChoice>("Midi Channel", "Midi Channel", channelStringArray, 0));
 
+    juce::StringArray tuningStringArray;
+    for (int i = 21; i < 48; i++)
+    {
+        tuningStringArray.add(juce::MidiMessage::getMidiNoteName(i, true, true, 4));
+    }
+    layout.add(std::make_unique<juce::AudioParameterChoice>("Root Note", "Root Note", tuningStringArray, 0));
+
     return layout;
 }
 
@@ -216,7 +254,7 @@ juce::StringArray WhammyHelperAudioProcessor::getMidiOutputList()
 
 std::string WhammyHelperAudioProcessor::getNoteDifference()
 {
-    return "-3";
+    return std::to_string(m_noteDifference);
 }
 
 //==============================================================================
